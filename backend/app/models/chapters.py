@@ -35,5 +35,9 @@ class Chapters(Base):
         server_default=func.now()
     )
 
-    # Связь с скомисом
+    # Связь с комисом и изображениями
     comic: Mapped["Comics"] = relationship(back_populates="chapters")
+    pages: Mapped[list["Pages"]] = relationship(
+        back_populates="chapter",
+        cascade="all, delete-orphan"
+    )

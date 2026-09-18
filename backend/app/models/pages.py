@@ -1,5 +1,5 @@
 from sqlalchemy import Integer, ForeignKey, String, UniqueConstraint
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.database import Base
 
 
@@ -35,3 +35,7 @@ class Pages(Base):
 
     # Ссылка на изображение на сервере.
     image_url: Mapped[str] = mapped_column(String(512), nullable=False)
+
+    # Связь изображения с комиксом и главой (Для выборки)
+    comic: Mapped["Comics"] = relationship(back_populates="pages")
+    chapter: Mapped["Chapters"] = relationship(back_populates="pages")

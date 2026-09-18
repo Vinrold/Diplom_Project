@@ -13,8 +13,13 @@ class Comics(Base):
     name: Mapped[str] = mapped_column(String(255), nullable=False)
     # описание комикса
     description: Mapped[str | None] = mapped_column(Text, nullable=True)
-    # связь
+
+    # связь 
     chapters: Mapped[list["Chapters"]] = relationship(
+        back_populates="comic",
+        cascade="all, delete-orphan"
+    )
+    pages: Mapped[list["Pages"]] = relationship(
         back_populates="comic",
         cascade="all, delete-orphan"
     )
