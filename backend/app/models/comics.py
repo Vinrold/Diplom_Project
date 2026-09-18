@@ -23,3 +23,7 @@ class Comics(Base):
         back_populates="comic",
         cascade="all, delete-orphan"
     )
+    tags: Mapped[list["Tags"]] = relationship(
+        secondary="tag_comics",
+        back_populates="comics",
+    )
