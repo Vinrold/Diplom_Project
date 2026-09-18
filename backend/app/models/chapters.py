@@ -1,4 +1,4 @@
-from sqlalchemy import Integer, Text, func, ForeignKey
+from sqlalchemy import Integer, Text, func, ForeignKey, UniqueConstraint
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from datetime import datetime
 from app.database import Base
@@ -7,6 +7,10 @@ from app.database import Base
 class Chapters(Base):
     # Указание таблицы БД
     __tablename__ = "chapters"
+    # уникальность сочетаний comics_id и number
+    __table_args__ = (
+        UniqueConstraint("comics_id", "number", name="uq_chapters_comics_number")
+    )
 
     # Указываем столбцы
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
@@ -32,4 +36,4 @@ class Chapters(Base):
     )
 
     # Связь с скомисом
-    comics: Mapped["Comics"] = relationship(back_populates="chapters")
+    comic: Mapped["Comics"] = relationship(back_populates="chapters")
