@@ -27,3 +27,7 @@ class Comics(Base):
         secondary="tag_comics",
         back_populates="comics",
     )
+    genres: Mapped[list["Genres"]] = relationship(
+            secondary="genres_comics",
+            back_populates="comics",
+    )
