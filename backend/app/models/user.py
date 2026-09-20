@@ -1,4 +1,4 @@
-from sqlalchemy import String
+from sqlalchemy import String, Column
 from sqlalchemy.orm import Mapped, mapped_column
 from app.database import Base
 
@@ -16,5 +16,5 @@ class User(Base):
     # - autoincrement - БД сама будет считать каждый следующий id
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     nickname: Mapped[str] = mapped_column(String(255), unique=True)
-    password: Mapped[str] = mapped_column(String(255))
-    # и т.д. для каждого столбца, который должен быть в таблице
+    email: Mapped[str] = mapped_column(String(120), unique=True, index=True, nullable=False)
+    password_hash: Mapped[str] = mapped_column(String(255), nullable=False)
