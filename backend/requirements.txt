@@ -4,3 +4,4 @@ sqlalchemy[asyncio]>=2.0.35
 psycopg[binary]>=3.2.0
 pydantic>=2.9.0
 pydantic-settings>=2.5.0
+passlib[bcrypt]==1.7.4
