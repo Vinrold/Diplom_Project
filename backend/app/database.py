@@ -1,11 +1,12 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import DeclarativeBase, sessionmaker
 from app.config import settings
+from pydantic_settings import BaseSettings
 
 # создание движка для взаимодействия с БД
 # ORM - мы пишем классы (модели), пайтон их переводит в SQL-запросы
 # echo=True - выводит полученные запросы после перевода
-engine = create_engine(settings.database_url, echo=True)
+engine = create_engine(settings.DATABASE_URL, echo=True)
 
 # создание сессий (подключений) к БД
 SessionLocal = sessionmaker(bind=engine, autocommit=False, autoflush=False)
