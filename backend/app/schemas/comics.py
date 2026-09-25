@@ -25,7 +25,7 @@ class TagShots(BaseModel):
 
 # ответ сервера на сайт
 class ComicsResponse(BaseModel):
-    # сервер узнает от БД, какой id получил пользователь
+    # сервер узнает от БД, какой id получил комикс
     id: int
     name: str
     description: Optional[str] = None
