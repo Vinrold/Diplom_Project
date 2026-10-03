@@ -33,74 +33,33 @@ def get_comments(commics_id: Optional[int] = None, db: Session = Depends(get_db)
     return comments
 
 
-# # Добавление Тэга
-# @router.post("/", response_model=TagResponse, status_code=status.HTTP_201_CREATED)
-# def create_tag(tag_data: TagCreate, db: Session = Depends(get_db)):
-    
-#     # проверка есть ли такой Тэг в списке
-#     existing_name = db.query(Tags).filter(Tags.name == tag_data.name).first()
-#     if existing_name:
-#         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Название уже занято")
+# Добавление коментария пользователем
+@router.post("/", response_model=CommentResponse, status_code=status.HTTP_201_CREATED)
+def create_comment(comment_data: CommentCreate, db:Session = Depends(get_db)):
+    user_id = comment_data.user_id
 
-#     # создаем 
-#     new_tag = Tags(name=tag_data.name)
-#     # добавляем
-#     db.add(new_tag)
-#     try:
-#         db.commit()
-#         db.refresh(new_tag)
-#         return new_tag
-#     # если что то пошло не так и тэг не записался
-#     except Exception:
-#         db.rollback()
-#         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Неудалось добавить Тэг")
+    # есть ли коммикс
+    comic = db.query(Comics).filter(Comics.id == comment_data.comics_id).first()
+    if not comic:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Комикс не найден")
 
+    # данные для создания  коментария
+    new_commets = Comments(
+        user_id=user_id,
+        comics_id=comment_data.comics_id,
+        content=comment_data.content
+    )
 
-# # Изменение Тэга
-# @router.put("/{tag_id}", response_model=TagResponse)
-# def update_tag(tag_id: int, update_data:TagUpdate, db: Session = Depends(get_db)):
+    # добавляем новую запись в базу
+    db.add(new_commets)
+    try:
+        db.commit()
+        db.refresh(new_commets)
+        return new_commets
+    except Exception:
+        db.rollback()
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Не удалось добавить коментарий  "
+        )
 
-#     # Поиск Тэга по ID
-#     tag = db.query(Tags).filter(Tags.id == tag_id).first()
-#     if not tag:
-#         raise HTTPException(
-#             status_code=status.HTTP_404_NOT_FOUND,
-#             detail="Тэга не найдено"
-#         )
-
-#     # принахождении обновляем
-#     update_dict = update_data.model_dump(exclude_unset=True)
-#     for key, value in update_dict.items():
-#         setattr(tag, key, value)
-#     try:
-#         db.commit()
-#         db.refresh(tag)
-#         return tag
-#     except Exception:
-#         db.rollback()
-#         raise HTTPException(
-#             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-#             detail="неудалось обновить запись про Тэг"
-#         )
-
-
-# # удаление тэг
-# @router.delete("/{tag_id}", status_code=status.HTTP_204_NO_CONTENT)
-# def delete_tag(tag_id: int, db: Session = Depends(get_db)):
-#     tag = db.query(Tags).filter(Tags.id == tag_id).first()
-#     if not tag:
-#         raise HTTPException(
-#             status_code=status.HTTP_404_NOT_FOUND,
-#             detail="Тэг не найден"
-#         )
-#     # Удаление
-#     db.delete(tag)
-#     try:
-#         db.commit()
-#     except Exception:
-#         db.rollback()
-#         raise HTTPException(
-#             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-#             detail="Не удалось удалить Тэг"
-#         )
-    
