@@ -44,22 +44,26 @@ def create_comment(comment_data: CommentCreate, db:Session = Depends(get_db)):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Комикс не найден")
 
     # данные для создания  коментария
-    new_commets = Comments(
+    new_commet = Comments(
         user_id=user_id,
         comics_id=comment_data.comics_id,
         content=comment_data.content
     )
 
     # добавляем новую запись в базу
-    db.add(new_commets)
+    db.add(new_commet)
     try:
         db.commit()
-        db.refresh(new_commets)
-        return new_commets
+        db.refresh(new_commet)
+        return new_commet
     except Exception:
         db.rollback()
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Не удалось добавить коментарий  "
         )
+
+@router.put("/{comment_id}", response_model=CommentResponse)
+def update_comment(comment_id:int, update_data:CommentUpdate, db: Session = Depends(get_db)):
+    
 
