@@ -10,7 +10,7 @@ class Pages(Base):
     __table_args__ = (
         UniqueConstraint(
             "comics_id", "chapters_id", "number", name="uq_pages_uq_number"
-        )
+        ),
     )
 
     # Указываем столбцы

@@ -31,3 +31,4 @@ class Comics(Base):
             secondary="genres_comics",
             back_populates="comics",
     )
+    comments: Mapped[list["Comments"]] = relationship(back_populates="comic", cascade="all, delete-orphan")

@@ -5,7 +5,6 @@ from typing import Optional
 # создание коммента
 class CommentCreate(BaseModel):
     # id - генерируется самой БД, поэтому сайт его не отправляет
-    user_id: int
     comics_id: int
     content: str
 
@@ -22,6 +21,7 @@ class CommentResponse(BaseModel):
     comics_id: int
     content: str
     created_date: datetime
+    updated_date: datetime
 
     # Для конвертации из модели алхимии 
     model_config = ConfigDict(from_attributes=True)

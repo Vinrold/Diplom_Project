@@ -9,7 +9,7 @@ class Chapters(Base):
     __tablename__ = "chapters"
     # уникальность сочетаний comics_id и number
     __table_args__ = (
-        UniqueConstraint("comics_id", "number", name="uq_chapters_comics_number")
+        UniqueConstraint("comics_id", "number", name="uq_chapters_comics_number"),
     )
 
     # Указываем столбцы

@@ -24,7 +24,7 @@ def get_chapters(
         if not comic:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Комикс не найден")
 
-        query = query.filter(Chapters.comic_id == comic_id)
+        query = query.filter(Chapters.comics_id == comic_id)
 
     chapters = query.all()
     return chapters
@@ -56,7 +56,7 @@ def create_chapter(
 
     # Уникальность номера главы в рамках одного комикса
     existing = db.query(Chapters).filter(
-        Chapters.comic_id == chapter_data.comic_id,
+        Chapters.comics_id == chapter_data.comics_id,
         Chapters.number == chapter_data.number
     ).first()
     if existing:
@@ -68,7 +68,7 @@ def create_chapter(
     new_chapter = Chapters(
         title=chapter_data.title,
         number=chapter_data.number,
-        comic_id=chapter_data.comic_id
+        comics_id=chapter_data.comics_id
     )
 
     db.add(new_chapter)

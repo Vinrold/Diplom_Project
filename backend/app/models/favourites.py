@@ -25,6 +25,6 @@ class Favourites(Base):
     # ограничивает повторение пар user_id и comics_id для предотвращения добавления 
     # пользователем в избранное одного и того же комикса
     __table_args__ = (
-        UniqueConstraint("user_id", "comics_id", name="unik_favorite_user_comics")
+        UniqueConstraint("user_id", "comics_id", name="unik_favorite_user_comics"),
     )
 
