@@ -3,6 +3,7 @@ from sqlalchemy.orm import DeclarativeBase, sessionmaker
 from app.config import settings
 from pydantic_settings import BaseSettings
 
+
 # создание движка для взаимодействия с БД
 # ORM - мы пишем классы (модели), пайтон их переводит в SQL-запросы
 # echo=True - выводит полученные запросы после перевода

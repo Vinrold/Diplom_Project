@@ -17,7 +17,8 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
 def get_password_hash(password: str) -> str:
-    return pwd_context.hash(password)
+    safe_password = password[:72]
+    return pwd_context.hash(safe_password)
 
 
 # получение всех пользователь

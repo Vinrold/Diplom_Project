@@ -5,7 +5,7 @@ class UserCreate(BaseModel):
     # id - генерируется самой БД, поэтому сайт его не отправляет
     nickname: str = Field(..., min_length=3, max_length=50)
     email: EmailStr
-    password: str = Field(..., min_length=6)
+    password: str = Field(..., min_length=6, max_length=72)
 
 # логин и пароль для входа
 class UserLogin(BaseModel):

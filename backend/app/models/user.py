@@ -19,4 +19,4 @@ class User(Base):
     email: Mapped[str] = mapped_column(String(120), unique=True, index=True, nullable=False)
     password_hash: Mapped[str] = mapped_column(String(255), nullable=False)
     is_active: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False)
-    comments: Mapped[list["Comment"]] = relationship(back_populates="user", cascade="all, delete-orphan")
+    comments: Mapped[list["app.models.comments.Comments"]] = relationship(back_populates="user", cascade="all, delete-orphan")
