@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { fetchUsers, createUser, deleteUser } from '../../api/users'
 import Button from '../../components/Button/Button'
+import LogoutButton from '../../components/ButtonLogout/ButtonLogout'
 
 function HomePage() {
   const [users, setUsers] = useState([])
@@ -30,12 +31,15 @@ function HomePage() {
   const handleSubmit = async (e) => {
     e.preventDefault()
     try {
-      await createUser({ nickname, password })
+      await createUser({ email: nickname, password })
       setNickname('')
       setPassword('')
       loadUsers() 
     } catch (err) {
-      setError(err.response?.data?.detail || 'Ошибка при создании пользователя')
+      let msg = 'Ошибк при создании пользователя'
+      if (err instanceof Error) msg = err.message
+      else if (typeof err === 'object' && err.detail) msg = err.detail
+      setError(msg)
     }
   }
 
@@ -53,17 +57,23 @@ function HomePage() {
     }
   }
 
+
   return (
     <div>
+      
       <h2>Управление пользователями</h2>
       
+      <LogoutButton>
+        Выход
+      </LogoutButton>
+
       {error && <p style={{ color: 'red', marginBottom: '1rem' }}>{error}</p>}
       
       {}
       <form onSubmit={handleSubmit} style={{ marginBottom: '2rem', display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
         <input 
           type="text" 
-          placeholder="Никнейм" 
+          placeholder="email" 
           value={nickname} 
           onChange={(e) => setNickname(e.target.value)} 
           required 
@@ -78,9 +88,10 @@ function HomePage() {
         <Button type="submit" disabled={loading}>
           {loading ? 'Создание...' : 'Добавить'}
         </Button>
+            
+        
       </form>
 
-      {}
       <h3>Список ({users.length})</h3>
       {users.length === 0 ? (
         <p>Пользователей пока нет. Добавьте первого!</p>

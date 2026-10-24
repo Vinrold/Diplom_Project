@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 import app.models
 from app.database import engine, Base
-from app.routers import users, auth, chapters, comics, comments, genre, tags
+from app.routers import users, auth, chapters, comics, comments, genre, tags, pages
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -21,7 +21,10 @@ app = FastAPI(
 # настройка CORS, чтобы сервер не банил наш же сайт
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"], #по факту ip и порт от клиента
+    allow_origins=[
+        "http://127.0.0.1:5173",
+        "http://localhost:5173",
+        ], #по факту ip и порт от клиента
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -32,6 +35,7 @@ app.include_router(auth.router)
 app.include_router(comics.router)
 app.include_router(comments.router)
 app.include_router(chapters.router)
+app.include_router(pages.router)
 app.include_router(genre.router)
 app.include_router(tags.router)
 
