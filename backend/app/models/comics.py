@@ -1,4 +1,4 @@
-from sqlalchemy import String, Text
+from sqlalchemy import String, Text, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.database import Base
 
@@ -13,7 +13,10 @@ class Comics(Base):
     name: Mapped[str] = mapped_column(String(255), nullable=False)
     # описание комикса
     description: Mapped[str | None] = mapped_column(Text, nullable=True)
-
+    # Владелец
+    owner_id: Mapped[int | None] = mapped_column(ForeignKey("users.id"), nullable=False, index=True)
+    # сылка на картинку
+    image_url: Mapped[str | None] = mapped_column(String(512), nullable=True)
     # связь 
     chapters: Mapped[list["Chapters"]] = relationship(
         back_populates="comic",
@@ -27,6 +30,9 @@ class Comics(Base):
         secondary="tag_comics",
         back_populates="comics",
     )
+
+    owner = relationship("User", back_populates="comics")
+
     genres: Mapped[list["Genres"]] = relationship(
             secondary="genres_comics",
             back_populates="comics",

@@ -2,8 +2,11 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
 from app.dependencies import get_db
+from app.models.user import User
 from app.models.comics import Comics
 from app.schemas.comics import ComicsCreate, ComicsResponse, ComicsUpdate
+from app.security import get_current_user
+
 
 router = APIRouter(
     # начало эндпоинтов - префикс
@@ -29,7 +32,9 @@ def get_comic(comic_id: int, db: Session = Depends(get_db)):
 
 # создание комикса
 @router.post("/", response_model=ComicsResponse, status_code=status.HTTP_201_CREATED)
-def create_comic(comics_data: ComicsCreate, db: Session = Depends(get_db)):
+def create_comic(comics_data: ComicsCreate,
+                current_user: User = Depends(get_current_user),
+                db: Session = Depends(get_db)):
 
     # 1. сначала нужно проверить, нет ли уже комикса с таким же названием
     existing_by_name = db.query(Comics).filter(Comics.name == comics_data.name).first()
@@ -39,7 +44,9 @@ def create_comic(comics_data: ComicsCreate, db: Session = Depends(get_db)):
     # если такого названия не было, создаем через ORM
     new_comic = Comics(
         name=comics_data.name,
-        description=comics_data.description
+        description=comics_data.description,
+        image_url=comics_data.image_url,
+        owner_id=current_user.id
     )
 
     db.add(new_comic) # передали инструкцию БД

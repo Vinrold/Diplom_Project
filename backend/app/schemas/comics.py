@@ -6,11 +6,14 @@ class ComicsCreate(BaseModel):
     # id - генерируется самой БД, поэтому сайт его не отправляет
     name: str
     description: Optional[str] = None
+    image_url: Optional[str] = None
 
 # Обновление комикса
 class ComicsUpdate(BaseModel):
     name: Optional[str] = None
     description: Optional[str] = None
+    image_url: Optional[str] = None
+
 
 
 class GenreShots(BaseModel):
@@ -29,8 +32,11 @@ class ComicsResponse(BaseModel):
     id: int
     name: str
     description: Optional[str] = None
+    image_url: Optional[str] = None
     genres: List[GenreShots] = []
     tags: List[TagShots] = []
+    owner_id: int | None
+
 
     # Для конвертации из модели алхимии
     model_config = ConfigDict(from_attributes=True)

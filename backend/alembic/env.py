@@ -6,6 +6,16 @@ from alembic import context
 
 # Импортируем Base и все модели
 from app.database import Base
+from app.models.comics import Comics
+from app.models.user import User
+from app.models.tags import Tags
+from app.models.genres import Genres
+from app.models.chapters import Chapters
+from app.models.pages import Pages
+from app.models.comments import Comments
+from app.models.favourites import Favourites
+from app.models.genres_comics import Genres_comicses
+from app.models.tag_comics import Tag_comics
 
 config = context.config
 

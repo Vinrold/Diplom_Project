@@ -1,7 +1,7 @@
 .container {
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items:baseline;
   min-height: 100vh;
   background-color: #000000;
   padding: 20px;
