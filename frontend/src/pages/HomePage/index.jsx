@@ -19,30 +19,21 @@ function HomePage() {
 
     const fetchComics = async () => {
       try {
-        const res = await fetch('/comics/', {
+        // Используем публичный эндпоинт — он не требует токена
+        const res = await fetch('http://127.0.0.1:8000/comics/public', {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`,
           },
         });
 
-        // Читаем текст ДО попытки парсить JSON — это спасёт от «Unexpected token '<'»
         const text = await res.text();
 
         if (!res.ok) {
           console.error('❌ Status:', res.status);
-          console.error('❌ Response body:', text); // тут будет HTML или JSON с ошибкой
-
-        if (res.status === 401) {
-          localStorage.removeItem('access_token');
-          localStorage.removeItem('refresh_token');
-          navigate('/login');
-          return;
+          console.error('❌ Response body:', text);
+          throw new Error(`Ошибка сервера: ${res.status}`);
         }
-
-        throw new Error(`Ошибка сервера: ${res.status}`);
-        }   
 
         const data = JSON.parse(text);
         setComics(Array.isArray(data) ? data : []);
@@ -54,37 +45,7 @@ function HomePage() {
       }
     };
 
-    const allFetchComics = async () => {
-      try {
-        const res = await fetch('/comics/', {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        });
 
-        // Читаем текст ДО попытки парсить JSON — это спасёт от «Unexpected token '<'»
-        const text = await res.text();
-
-        if (!res.ok) {
-          console.error('❌ Status:', res.status);
-          console.error('❌ Response body:', text); // тут будет HTML или JSON с ошибкой
-
-
-        throw new Error(`Ошибка сервера: ${res.status}`);
-        }   
-
-        const data = JSON.parse(text);
-        setAllComics(Array.isArray(data) ? data : []);
-      } catch (err) {
-        console.error('💥 Fetch error:', err);
-        setError(err instanceof Error ? err.message : 'Произошла ошибка при загрузке комиксов');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    allFetchComics()
     fetchComics()
   }, [navigate]);
 
@@ -114,43 +75,37 @@ function HomePage() {
   return (
     <div className={style.container}>
       <header className={style.header}>
-        <h1 className={style.title}>Мои комиксы</h1>
-        {/* кнопка кнопка добавления нового комикса */}
+        <h1 className={style.title}>Каталог комиксов</h1>
         <button
           className={style.regularBtn}
-        >Добавить комикс</button>
-        {/* кнопка выхода из акк */}
-        <button
-          onClick={handleLogout}
-          className={style.logoutBtn}
-          type='button' 
-        >Выйти</button>
+          onClick={() => navigate('/create-comic')} // если есть страница создания
+        >
+          Добавить комикс
+        </button>
       </header>
 
       {comics.length === 0 ? (
         <div className={style.emptyState}>
-          <h3>У вас пока нет комиксов</h3>
-          <p>Добавьте первый комикс, чтобы он появился здесь</p>
+          <h3>Пока нет опубликованных комиксов</h3>
+          <p>Создайте и опубликуйте первый комикс — он появится здесь.</p>
         </div>
       ) : (
         <div className={style.comicsGrid}>
-          {comics.map((comic)=>(
+          {comics.map((comic) => (
             <article key={comic.id} className={style.comicCard}>
-
-              <img 
-                src={getImageUrl(comic.image_url) }
+              <img
+                src={getImageUrl(comic.image_url)}
                 alt={comic.name}
-                className={style.comicImage} 
+                className={style.comicImage}
               />
-
               <div className={style.comicInfo}>
                 <h3 className={style.comicTitle}>{comic.name}</h3>
                 <p className={style.comicSubtitle}>
-                  {comic.author || 'Автор не известен'}
+                  {comic.owner_id || 'Автор неизвестен'}
                 </p>
                 <div className={style.comicMeta}>
-                  <span>Год: {comic.year || '-'}</span>
-                  {comic.genre && <span>Жанр: {comic.genre}</span>}
+                  <span>ID: {comic.id}</span>
+                  <span>{comic.is_published ? 'Опубликован' : 'Черновик'}</span>
                 </div>
               </div>
             </article>
@@ -158,7 +113,7 @@ function HomePage() {
         </div>
       )}
     </div>
-  )
+  );
 
 }
 
