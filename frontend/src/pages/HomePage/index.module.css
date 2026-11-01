@@ -30,8 +30,23 @@
   transition: background-color 0.2s;
 }
 
+.regularBtn {
+  padding: 8px 16px;
+  background-color: #6e6e6e;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.2s;
+}
+
 .logoutBtn:hover {
   background-color: #a71d2a;
+}
+
+.regularBtn:hover {
+  background-color: #3b3b3b;
 }
 
 .comicsGrid {

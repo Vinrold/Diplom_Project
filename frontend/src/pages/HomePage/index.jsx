@@ -83,6 +83,11 @@ function HomePage() {
     <div className={style.container}>
       <header className={style.header}>
         <h1 className={style.title}>Мои комиксы</h1>
+        {/* кнопка кнопка добавления нового комикса */}
+        <button
+          className={style.regularBtn}
+        >Добавить комикс</button>
+        {/* кнопка выхода из акк */}
         <button
           onClick={handleLogout}
           className={style.logoutBtn}
