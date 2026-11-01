@@ -1,4 +1,4 @@
-from sqlalchemy import String, Text, ForeignKey
+from sqlalchemy import String, Text, ForeignKey, Boolean
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.database import Base
 
@@ -17,6 +17,8 @@ class Comics(Base):
     owner_id: Mapped[int | None] = mapped_column(ForeignKey("users.id"), nullable=False, index=True)
     # сылка на картинку
     image_url: Mapped[str | None] = mapped_column(String(512), nullable=True)
+    # флаг публикации
+    is_published: Mapped[bool] = mapped_column(Boolean, default=False, server_default="FALSE")
     # связь 
     chapters: Mapped[list["Chapters"]] = relationship(
         back_populates="comic",

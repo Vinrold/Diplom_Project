@@ -21,6 +21,18 @@ def get_comics(db: Session = Depends(get_db)):
     comics = db.query(Comics).all()
     return comics
 
+# Получение публичных комиксов  максимуим 50 шт
+@router.get("/public", response_model=list[ComicsResponse])
+def get_public_comics(db: Session = Depends(get_db)):
+    # Отдаём только опубликованные, максимум 50 штук
+    comics = (
+        db.query(Comics)
+        .filter(Comics.is_published == True)
+        .limit(50)
+        .all()
+    )
+    return comics
+
 # получение комикса по id
 @router.get("/{comic_id}", response_model=ComicsResponse)
 def get_comic(comic_id: int, db: Session = Depends(get_db)):

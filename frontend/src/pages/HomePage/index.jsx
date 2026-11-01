@@ -6,6 +6,7 @@ import style from './index.module.css'
 function HomePage() {
   const navigate = useNavigate();
   const [comics, setComics] = useState([]);
+  const [allComics, setAllComics] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
@@ -53,6 +54,37 @@ function HomePage() {
       }
     };
 
+    const allFetchComics = async () => {
+      try {
+        const res = await fetch('/comics/', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+
+        // Читаем текст ДО попытки парсить JSON — это спасёт от «Unexpected token '<'»
+        const text = await res.text();
+
+        if (!res.ok) {
+          console.error('❌ Status:', res.status);
+          console.error('❌ Response body:', text); // тут будет HTML или JSON с ошибкой
+
+
+        throw new Error(`Ошибка сервера: ${res.status}`);
+        }   
+
+        const data = JSON.parse(text);
+        setAllComics(Array.isArray(data) ? data : []);
+      } catch (err) {
+        console.error('💥 Fetch error:', err);
+        setError(err instanceof Error ? err.message : 'Произошла ошибка при загрузке комиксов');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    allFetchComics()
     fetchComics()
   }, [navigate]);
 

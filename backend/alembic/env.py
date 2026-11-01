@@ -1,5 +1,9 @@
+from dotenv import load_dotenv
+load_dotenv()
+
 import os
 from logging.config import fileConfig
+
 
 from sqlalchemy import engine_from_config, pool
 from alembic import context
@@ -23,10 +27,13 @@ if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
 # Берём URL из .env
-config.set_main_option(
-    "sqlalchemy.url",
-    os.getenv("DATABASE_URL", "postgresql+psycopg2://postgres:postgres@localhost:5432/comics_db")
-)
+url = os.getenv("DATABASE_URL")
+if not url:
+    raise RuntimeError(
+        "Переменная окружения DATABASE_URL не найдена! "
+        "Проверь .env и перезапусти терминал/VS Code."
+    )
+config.set_main_option("sqlalchemy.url", url)
 
 target_metadata = Base.metadata
 
