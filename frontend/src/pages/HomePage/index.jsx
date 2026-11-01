@@ -3,20 +3,13 @@ import { useNavigate } from 'react-router-dom'
 import style from './index.module.css'
 
 
-function HomePage() {
+function HomePage({ isLoggedIn, userName, handleLogout }) {
   const navigate = useNavigate();
   const [comics, setComics] = useState([]);
-  const [allComics, setAllComics] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
   useEffect(() => {
-    const token = localStorage.getItem('access_token');
-    if (!token){
-      navigate('/login');
-      return;
-    }
-
     const fetchComics = async () => {
       try {
         // Используем публичный эндпоинт — он не требует токена
@@ -47,7 +40,7 @@ function HomePage() {
 
 
     fetchComics()
-  }, [navigate]);
+  }, []);
 
   const getImageUrl = (url) => {
     if (!url) return 'https://via.placeholder.com/240x340?text=No+Image';
@@ -58,11 +51,7 @@ function HomePage() {
     return url;
   };
 
-  const handleLogout = ()=>{
-    localStorage.removeItem('access_token');
-    localStorage.removeItem('refresh_token');
-    navigate('/login');
-  };
+
 
   if (loading) {
     return <div className={style.loading}>Загрузка списка комиксов</div>;
@@ -76,12 +65,17 @@ function HomePage() {
     <div className={style.container}>
       <header className={style.header}>
         <h1 className={style.title}>Каталог комиксов</h1>
-        <button
-          className={style.regularBtn}
-          onClick={() => navigate('/create-comic')} // если есть страница создания
-        >
-          Добавить комикс
-        </button>
+        {isLoggedIn && (
+          <button
+            className={style.addBtn}
+            onClick={() => {
+              // Если страницы создания ещё нет — можно просто показать алерт
+              window.location.href = '/create-comic';
+            }}
+          >
+            + Добавить комикс
+          </button>
+        )}
       </header>
 
       {comics.length === 0 ? (
