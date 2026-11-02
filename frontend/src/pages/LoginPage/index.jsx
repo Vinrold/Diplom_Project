@@ -61,11 +61,11 @@ function LoginPage() {
           Нет аккаунта?{' '}
           <span
             className={styles.registerLink}
-            onClick={() => navigate('/register')}
+            onClick={() => navigate('/users')}
             role="button"
             tabIndex={0}
             onKeyDown={(e) => {
-              if (e.key === 'Enter') navigate('/register');
+              if (e.key === 'Enter') navigate('/users');
             }}
           >
             Зарегистрироваться
