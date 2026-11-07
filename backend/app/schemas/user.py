@@ -16,7 +16,8 @@ class UserLogin(BaseModel):
 # ответ с токенном доступа
 class Token(BaseModel):
     access_token: str
-    token_type: str
+    refresh_token: str
+    token_type: str = "bearer"
 
 
 # класс для описания, что в ответ должен отправить на сайт сервер

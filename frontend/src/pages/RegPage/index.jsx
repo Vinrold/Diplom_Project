@@ -2,7 +2,7 @@ import { useState } from "react";
 import style from './index.module.css'
 
 
-function RegisterModal({ isOpen, onClose}) {
+function RegisterModal({ isOpen, onClose, onSuccess}) {
     const [formData, setFormData] = useState({
         nickname: '',
         email: '',
@@ -36,7 +36,27 @@ function RegisterModal({ isOpen, onClose}) {
                 throw new Error(data.detail || 'Ошибка регистрации');
             }
 
-            onClose();
+            const loginRes = await fetch('http://127.0.0.1:8000/auth/login',{
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    email: formData.email,
+                    password: formData.password,
+                })
+            });
+
+            const loginData = await loginRes.json();
+
+            if (!loginRes.ok){
+                throw new Error(loginData.detail || 'Автовход после регистрации не удался')
+            }
+
+            localStorage.setItem('access_token', loginData.access_token);
+            if (loginData.refresh_token) {
+                localStorage.setItem('refresh_token', loginData.refresh_token);
+            }
+
+            onSuccess();
         } catch (err) {
             setError(err.message || 'Не удалось Зарегестрироваться');
         } finally {

@@ -1,66 +1,58 @@
 import { useState, useEffect } from 'react';
-import { BrowserRouter } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import AppRoutes from './routes/AppRoutes';
 import style from './index.module.css';
 import logo from './assets/in-yn.jpeg'
 import RegisterModal from './pages/RegPage';
+import LoginPage from './pages/LoginPage';
+import { checkAuth } from './components/ChekAuth/ChekAuth';
 
 
 function App() {
+  const navigate = useNavigate();
+
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userName, setUserName] = useState('');
+  const [userEmail, setUserEmail] = useState('');
   const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
 
+
+  const applyUser = (user) => {
+    if (user) {
+      setIsLoggedIn(true);
+      setUserName(user.nickname || 'Пользователь');
+      setUserEmail(user.email || '');
+    } else {
+      setIsLoggedIn(false);
+      setUserName('');
+      setUserEmail('');
+    }
+  };
 
   // Авторизация
   useEffect(()=>{
-    const token = localStorage.getItem('access_token');
-    if (!token){
-      setIsLoggedIn(false);
-      setUserName('');
-      return;
-    }
-    setIsLoggedIn(true);
-
-    // Запрос на текущего пользователя
-    fetch('http://127.0.0.1:8000/users/me', {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`,
-      },
-    })
-      .then((res)=>{
-        // Если токен истек выходим
-        if (!res.ok){
-          localStorage.removeItem('access_token');
-          localStorage.removeItem('refresh_token');
-          setIsLoggedIn(false);
-          setUserName('');
-          return;
-        }
-        return res.json();
-      })
-      .then((user)=>{
-        setUserName(user.nickname || 'Пользователь')
-        setIsLoggedIn(true);
-      })
-      .catch(()=>{
-        localStorage.removeItem('access_token');
-        localStorage.removeItem('refresh_token');
-        setIsLoggedIn(false);
-        setUserName('');
-      });
+    checkAuth(applyUser);
   }, []);
 
   const handleLogout = ()=>{
     localStorage.removeItem('access_token');
     localStorage.removeItem('refresh_token');
-    setIsLoggedIn(false);
-    setUserName('');
+    applyUser(null)
     // window.location.href = '/login';
   };
+
+  const handleLoginSuccess = async () => {
+    setIsLoginModalOpen(false);
+    await checkAuth(applyUser);
+    navigate('/', { replace: true });
+  };
+
+  const handleRegisterSuccess = () => {
+    setIsRegisterModalOpen(false);
+    checkAuth(applyUser )
+  }
 
   return (
     <>
@@ -71,6 +63,7 @@ function App() {
           
           {/* управление */}
           {/* логин/логаут */}
+          
           {isLoggedIn ? (
             <div className={style.userMenu}>
               <span className={style.username}>{userName}</span>
@@ -82,25 +75,33 @@ function App() {
             </div>
           ) : (
             <div className={style.authLinks}>
-              <a href="/login" className={style.authLink}>Вход</a>
-              {/* Кнопка регистрации */}
-              <button 
+              <button                           
+                onClick={() => setIsLoginModalOpen(true)}
+                className={style.authLink}
+                type='button'
+              >Вход</button>
+              <button
                 onClick={() => setIsRegisterModalOpen(true)}
                 className={style.authLink}
-                style={{ textDecoration: 'underline', cursor: 'pointer'}}
-              >
-                Регистрация
-              </button>
+                style={{ textDecoration: 'underline', cursor: 'pointer' }}
+                type='button'
+              >Регистрация</button>
             </div>
           )}
         </header>
         <main className={style.main}>
-          <AppRoutes isLoggedIn={isLoggedIn} userName={userName} handleLogout={handleLogout}/>
+          <AppRoutes isLoggedIn={isLoggedIn} userEmail={userEmail} handleLogout={handleLogout}/>
         </main>
       </div>
       <RegisterModal 
         isOpen={isRegisterModalOpen}
         onClose={() => setIsRegisterModalOpen(false)}
+        onSuccess={handleRegisterSuccess}
+      />
+      <LoginPage
+        isOpen={isLoginModalOpen}
+        onClose={() => setIsLoginModalOpen(false)}
+        onSuccess={handleLoginSuccess}
       />
     </>
   )

@@ -8,7 +8,7 @@ from app.dependencies import get_db
 from app.models.user import User
 from app.schemas.user import UserLogin, Token
 from app.config import settings
-from app.security import verify_password, create_access_token
+from app.security import verify_password, create_access_token, create_refresh_token
 
 router = APIRouter(
     # начало эндпоинтов - префикс
@@ -29,4 +29,9 @@ def login(user: UserLogin, db: Session = Depends(get_db)):
         data={"sub": db_user.email},
         expires_delta=timedelta(minutes=settings.access_token_expire_minutes)
     )
-    return {"access_token":access_token, "token_type": "bearer"}
+
+    refresh_token = create_refresh_token(data={"sub": db_user.email})
+
+    return {"access_token":access_token, "refresh_token": refresh_token, "token_type": "bearer"}
+
+

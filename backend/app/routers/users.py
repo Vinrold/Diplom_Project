@@ -1,16 +1,21 @@
 from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+from jose import jwt, JWTError
 from sqlalchemy.orm import Session
 from passlib.context import CryptContext
 
 from app.dependencies import get_db
 from app.models.user import User
 from app.schemas.user import UserCreate, UserResponse
+from app.config import settings
 
 router = APIRouter(
     # начало эндпоинтов - префикс
     prefix="/users",
     tags=["users"],
 )
+
+bearer_scheme = HTTPBearer()
 
 # инициализация хешера
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -26,6 +31,33 @@ def get_password_hash(password: str) -> str:
 def get_users(db: Session = Depends(get_db)):
     users = db.query(User).all()
     return users
+
+@router.get("/me", response_model=UserResponse)
+def get_me(
+    credentials: HTTPAuthorizationCredentials = Depends(bearer_scheme),
+    db: Session = Depends(get_db),
+):
+    token = credentials.credentials
+
+    try:
+        payload = jwt.decode(token, settings.secret_key, algorithms=[settings.algorithm])
+        email = payload.get("sub")
+        if email is None:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Невалидный токен",
+            )
+    except JWTError:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Невалидный токен",
+        )
+
+    user = db.query(User).filter(User.email == email).first()
+    if not user:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Пользователь не найден")
+
+    return user
 
 # получение пользователя по id
 @router.get("/{user_id}", response_model=UserResponse)
