@@ -1,29 +1,18 @@
 from fastapi import APIRouter, Depends, HTTPException, status
-from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
-from jose import jwt, JWTError
 from sqlalchemy.orm import Session
-from passlib.context import CryptContext
 
 from app.dependencies import get_db
 from app.models.user import User
-from app.schemas.user import UserCreate, UserResponse
-from app.config import settings
+from app.models.comics import Comics
+from app.models.favourites import Favourites
+from app.schemas.user import UserCreate, UserResponse, UserUpdate
+from app.security import get_current_user, get_password_hash
 
 router = APIRouter(
     # начало эндпоинтов - префикс
     prefix="/users",
     tags=["users"],
 )
-
-bearer_scheme = HTTPBearer()
-
-# инициализация хешера
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-
-
-def get_password_hash(password: str) -> str:
-    safe_password = password[:72]
-    return pwd_context.hash(safe_password)
 
 
 # получение всех пользователь
@@ -33,31 +22,44 @@ def get_users(db: Session = Depends(get_db)):
     return users
 
 @router.get("/me", response_model=UserResponse)
-def get_me(
-    credentials: HTTPAuthorizationCredentials = Depends(bearer_scheme),
+def get_me(current_user: User = Depends(get_current_user)):
+    return current_user
+
+@router.patch("/me", response_model=UserResponse)
+def update_profile(
+    data: UserUpdate,
+    current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
-    token = credentials.credentials
+    if data.nickname and data.nickname != current_user.nickname:
+        exists = db.query(User).filter(User.nickname == data.nickname).first()
+        if exists:
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail='Никнейм уже занят')
 
-    try:
-        payload = jwt.decode(token, settings.secret_key, algorithms=[settings.algorithm])
-        email = payload.get("sub")
-        if email is None:
-            raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="Невалидный токен",
-            )
-    except JWTError:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Невалидный токен",
-        )
+        current_user.nickname = data.nickname
+        
+    if data.email and data.email != current_user.email:
+        exists = db.query(User).filter(User.email == data.email).first()
+        if exists:
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail='Email уже занят')
 
-    user = db.query(User).filter(User.email == email).first()
-    if not user:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Пользователь не найден")
+        current_user.email = data.email
+    db.commit()
+    db.refresh(current_user)
+    return current_user
 
-    return user
+@router.get("/me/comics")
+def get_my_comics(current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+    comics = db.query(Comics).filter(Comics.owner_id == current_user.id).all()
+    return comics
+
+@router.get("/me/favorites")
+def get_my_favorites(current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+    favorites = (
+        db.query(Comics).join(Favourites, Favourites.comics_id == Comics.id)
+        .filter(Favourites.user_id == current_user.id).all()
+    )
+    return favorites
 
 # получение пользователя по id
 @router.get("/{user_id}", response_model=UserResponse)

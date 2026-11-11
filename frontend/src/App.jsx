@@ -59,20 +59,35 @@ function App() {
       <div className={style.container}>
         <header className={style.header}>
           {/* Логотип */}
-          <img src={logo} alt="Логотип" className={style.logo}/>
+          <img src={logo} alt="Логотип" className={style.logo} onClick={()=>{navigate('/')}}/>
           
           {/* управление */}
           {/* логин/логаут */}
           
           {isLoggedIn ? (
             <div className={style.userMenu}>
-              <span className={style.username}>{userName}</span>
-              <button 
-                onClick={handleLogout}
-                className={style.logoutBtn}
-                type='button'
-              >Выйти</button>
+              <div>
+                <span className={style.username}>{userName}</span>
+                <button 
+                  onClick={handleLogout}
+                  className={style.logoutBtn}
+                  type='button'
+                >Выйти</button>
+              </div>
+              <div>
+                <button
+                  className={style.addBtn}
+                  onClick={() => {
+                    // Если страницы создания ещё нет — можно просто показать алерт
+                    navigate('/account')
+                  }}
+                >
+                  Личный кабинет
+                </button>
+              </div>
             </div>
+
+                    
           ) : (
             <div className={style.authLinks}>
               <button                           

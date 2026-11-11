@@ -1,0 +1,104 @@
+.page-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+.page-title {
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+}
+
+.profile-block {
+  margin-bottom: 2.5rem;
+}
+
+.profile-card {
+  background: var(--card-bg, #fff);
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.profile-name {
+  margin: 0 0 0.25rem;
+}
+
+.profile-email {
+  color: var(--text-muted, #777);
+  margin: 0;
+}
+
+.section-block {
+  margin-bottom: 2.5rem;
+}
+
+.section-title {
+  font-size: 1.4rem;
+  margin-bottom: 1rem;
+}
+
+.count-badge {
+  color: var(--text-muted, #777);
+  font-weight: normal;
+}
+
+.grid-view {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1.25rem;
+}
+
+.card {
+  background: var(--card-bg, #fff);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+}
+
+.card-image {
+  width: 100%;
+  aspect-ratio: 2 / 3;
+  object-fit: cover;
+  display: block;
+}
+
+.card-info {
+  padding: 0.75rem;
+}
+
+.card-title {
+  margin: 0 0 0.5rem;
+  font-size: 1rem;
+}
+
+.card-meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  color: var(--text-muted, #777);
+}
+
+.empty-state {
+  text-align: center;
+  padding: 3rem 1rem;
+  background: var(--card-bg, #fff);
+  border-radius: 12px;
+  color: var(--text-muted, #777);
+}
+
+.loading,
+.error {
+  text-align: center;
+  padding: 4rem 1rem;
+  font-size: 1.1rem;
+}
+
+.error {
+  color: #d33;
+}

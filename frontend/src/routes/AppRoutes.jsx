@@ -1,8 +1,9 @@
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import ProtectedRoute from '../components/ProtectedRoute';
 import HomePage from '../pages/HomePage';
 import LoginPage from '../pages/LoginPage';
 import UserPage from '../pages/UserPage';
+import Profile from '../pages/Profile';
 
 function AppRoutes({isLoggedIn, userName, handleLogout}) {
   return (
@@ -20,7 +21,12 @@ function AppRoutes({isLoggedIn, userName, handleLogout}) {
           <UserPage />
         </ProtectedRoute>
       } />
+      <Route path='/account' element={
+        localStorage.getItem('access_token') ? <Profile/> : <Navigate to='/' replace/>
+      }
+      />
     </Routes>
+
   )
 }
 

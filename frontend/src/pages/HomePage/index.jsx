@@ -42,13 +42,26 @@ function HomePage({ isLoggedIn, userName, handleLogout }) {
     fetchComics()
   }, []);
 
-  const getImageUrl = (url) => {
-    if (!url) return 'https://via.placeholder.com/240x340?text=No+Image';
-    if (url.startsWith('http://') || url.startsWith('https://')) return url;
-    if (url.startsWith('/uploads/')) {
-      return 'http://127.0.0.1:8000'+url;
+
+  const getImageUrl = (path) => {
+    // Если пути нет вообще — заглушка
+    if (!path) {
+      return 'https://via.placeholder.com/240x340?text=No+Image';
     }
-    return url;
+
+    // Если уже полный URL (например, из стороннего источника) — возвращаем как есть
+    if (path.startsWith('http://') || path.startsWith('https://')) {
+      return path;
+    }
+
+    // Твой кейс: относительный путь вроде "/uploads/comics/..."
+    // Формируем полный адрес. Для локальной разработки:
+    const baseUrl = 'http://127.0.0.1:8000';
+    
+    // Убираем ведущий слэш у пути, чтобы не было двойного //
+    const cleanPath = path.startsWith('/') ? path.slice(1) : path;
+
+    return `${baseUrl}/${cleanPath}`;
   };
 
 
@@ -65,17 +78,6 @@ function HomePage({ isLoggedIn, userName, handleLogout }) {
     <div className={style.container}>
       <header className={style.header}>
         <h1 className={style.title}>Каталог комиксов</h1>
-        {isLoggedIn && (
-          <button
-            className={style.addBtn}
-            onClick={() => {
-              // Если страницы создания ещё нет — можно просто показать алерт
-              window.location.href = '/create-comic';
-            }}
-          >
-            + Добавить комикс
-          </button>
-        )}
       </header>
 
       {comics.length === 0 ? (

@@ -1,4 +1,6 @@
 from pydantic import BaseModel, ConfigDict, EmailStr, Field
+from typing import Optional
+
 
 # класс для описания, какие данные будут отправлять от клиента
 class UserCreate(BaseModel):
@@ -18,6 +20,11 @@ class Token(BaseModel):
     access_token: str
     refresh_token: str
     token_type: str = "bearer"
+
+# обновление данных пользователя
+class UserUpdate(BaseModel):
+    nickname: Optional[str] = Field(None, min_length=3, max_length=50)
+    email: Optional[str] = None
 
 
 # класс для описания, что в ответ должен отправить на сайт сервер
