@@ -6,6 +6,7 @@ import style from './index.module.css';
 import logo from './assets/in-yn.jpeg'
 import RegisterModal from './pages/RegPage';
 import LoginPage from './pages/LoginPage';
+
 import { checkAuth } from './components/ChekAuth/ChekAuth';
 
 
@@ -143,11 +144,19 @@ function App() {
         isOpen={isRegisterModalOpen}
         onClose={() => setIsRegisterModalOpen(false)}
         onSuccess={handleRegisterSuccess}
+        onOpenLogin={() => {
+          setIsRegisterModalOpen(false);
+          setIsLoginModalOpen(true);
+        }}
       />
       <LoginPage
         isOpen={isLoginModalOpen}
         onClose={() => setIsLoginModalOpen(false)}
         onSuccess={handleLoginSuccess}
+        onOpenRegister={() => {
+          setIsLoginModalOpen(false);      // закрываем вход
+          setIsRegisterModalOpen(true);
+        }}
       />
     </>
   );
