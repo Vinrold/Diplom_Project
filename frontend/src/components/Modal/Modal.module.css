@@ -1,34 +1,76 @@
-/* src/components/Modal.module.css */
+/* === Затемнение поверх всей страницы === */
 .overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.6);
-  display: flex;
-  align-items: center;
-  justify-content: center;
   z-index: 1000;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
 }
 
+/* === Тёмная панель, как модалка Remanga === */
 .content {
-  background: #fff;
-  border-radius: 12px;
-  width: 90%;
-  max-width: 560px;
-  max-height: 90vh;      /* не вылезает за экран */
-  overflow-y: auto;      /* длинная форма прокручивается внутри */
-  padding: 24px;
+  position: relative;
+  width: 100%;
+  max-width: 480px;
+  max-height: calc(100vh - 40px);   /* не выше экрана */
+  overflow-y: auto;                 /* свой скролл при длинной форме */
+  background: #17171a;
+  border: 1px solid #26262b;
+  border-radius: 20px;
+  padding: 28px;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.6);
+  color: #f2f2f5;
+  box-sizing: border-box;
+}
+
+/* Chrome, Safari, Opera, Edge */
+.content::-webkit-scrollbar {
+  display: none;
+}
+
+/* Firefox */
+.content {
+  scrollbar-width: none;
 }
 
 .header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  margin-bottom: 16px;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 20px;
 }
 
+.title {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+/* Крестик — кружок с ховером, как на скрине */
 .close {
-  background: none;
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #26262b;
   border: none;
-  font-size: 18px;
+  color: #d8d8de;
+  font-size: 14px;
+  line-height: 1;
   cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.close:hover {
+  background: #33333a;
+  color: #ffffff;
+}
+
+.body {
+  font-size: 14px;
 }

@@ -1,159 +1,227 @@
+/* === Контейнер модалки поверх страницы === */
 .container {
   display: flex;
   justify-content: center;
-  align-items:baseline;
+  align-items: center;
   min-height: 100vh;
-  background-color: #000000;
+  background-color: rgba(0, 0, 0, 0.7);
   padding: 20px;
 }
 
+/* === Панель формы, как на скриншоте === */
 .form {
   width: 100%;
-  max-width: 400px;
-  padding: 2rem;
-  border-radius: 8px;
-  background: #000000;
-  box-shadow: 0 2px 8px rgba(134, 134, 134, 0.1);
-}
-
-.title {
-  margin-bottom: 1.5rem;
-  text-align: center;
-}
-
-.error {
-  color: #dc3545;
-  margin-bottom: 1rem;
-  text-align: center;
-  font-size: 0.9rem;
-}
-
-.field {
-  margin-bottom: 1rem;
-}
-
-.label {
-  display: block;
-  margin-bottom: 0.5rem;
-  font-weight: 500;
-}
-
-.input {
-  width: 100%;
-  padding: 8px 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  max-width: 420px;
+  background: #17171a;
+  border-radius: 20px;
+  padding: 32px 28px;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.6);
+  color: #f2f2f5;
   box-sizing: border-box;
-  font-size: 1rem;
-}
-
-.submitBtn {
-  width: 100%;
-  padding: 10px;
-  background-color: #007bff;
-  color: #fff;
-  border: none;
-  border-radius: 4px;
-  font-size: 1rem;
-  cursor: pointer;
-}
-
-.submitBtn:hover {
-  background-color: #0056b3;
-}
-
-.submitBtn:disabled {
-  background-color: #ccc;
-  cursor: not-allowed;
-}
-
-.registerLinkWrapper {
-  margin-top: 1.25rem;
-  text-align: center;
-  font-size: 0.9rem;
-}
-
-.registerLink {
-  color: #007bff;
-  text-decoration: underline;
-  cursor: pointer;
-}
-
-.registerLink:hover {
-  text-decoration: none;
-}
-
-.overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.6);
-  z-index: 2000;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.modal {
-  background: #fff;
-  padding: 24px;
-  border-radius: 12px;
-  width: 100%;
-  max-width: 400px;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.2);
 }
 
 .title {
-  margin: 0 0 16px 0;
-  font-size: 20px;
-}
-
-.field {
-  margin-bottom: 16px;
-}
-
-.field label {
-  display: block;
-  margin-bottom: 6px;
-  font-weight: 500;
-}
-
-.input {
-  width: 100%;
-  padding: 8px 12px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  box-sizing: border-box; /* важно, чтобы padding не ломал ширину */
-}
-
-.submitBtn {
-  width: 100%;
-  padding: 10px;
-  background-color: #4f46e5;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-}
-
-.submitBtn:disabled {
-  background-color: #a5a5a5;
-}
-
-.closeBtn {
-  margin-top: 12px;
-  width: 100%;
-  padding: 8px;
-  background: none;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  cursor: pointer;
+  margin: 0 0 24px;
+  text-align: center;
+  font-size: 22px;
+  font-weight: 700;
+  color: #ffffff;
 }
 
 .error {
   color: #ef4444;
+  background: #2a1416;
+  border: 1px solid #4a1f23;
+  border-radius: 10px;
+  padding: 10px 14px;
+  margin-bottom: 16px;
+  font-size: 13px;
+  text-align: center;
+}
+
+/* === Поля — тёмные таблетки со скруглением === */
+.field {
+  display: block;
   margin-bottom: 12px;
+}
+
+.field input,
+.field textarea {
+  width: 100%;
+  padding: 13px 16px;
+  background: #26262b;
+  border: 1px solid #33333a;
+  border-radius: 999px;          /* таблетка для input */
+  color: #f2f2f5;
   font-size: 14px;
+  outline: none;
+  box-sizing: border-box;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.field textarea {
+  border-radius: 16px;           /* для многострочного — мягкий скруглённый блок */
+  min-height: 90px;
+  resize: vertical;
+  line-height: 1.4;
+}
+
+.field input::placeholder,
+.field textarea::placeholder {
+  color: #6f6f78;
+}
+
+.field input:focus,
+.field textarea:focus {
+  border-color: #3b82f6;
+  background: #2b2b31;
+}
+
+/* Файловый инпут: браузерный вид не превратить в таблетку, прячем его за своей кнопкой */
+.field input[type="file"] {
+  padding: 10px;
+  border-radius: 12px;
+  color: #8a8a93;
+  cursor: pointer;
+}
+
+.field input[type="file"]::file-selector-button {
+  padding: 8px 16px;
+  margin-right: 12px;
+  background: #2e2e35;
+  color: #f2f2f5;
+  border: none;
+  border-radius: 999px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.field input[type="file"]::file-selector-button:hover {
+  background: #3a3a42;
+}
+
+/* Превью обложки */
+.preview {
+  margin-top: 10px;
+  width: 120px;
+  aspect-ratio: 2 / 3;
+  object-fit: cover;
+  border-radius: 10px;
+  display: block;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+}
+
+/* === Дропдауны жанров/тэгов === */
+.dropdown {
+  position: relative;
+  margin-bottom: 12px;
+}
+
+.dropdownBtn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 13px 16px;
+  background: #26262b;
+  border: 1px solid #33333a;
+  border-radius: 999px;
+  color: #f2f2f5;
+  font-size: 14px;
+  cursor: pointer;
+  transition: border-color 0.15s ease;
+}
+
+.dropdownBtn:hover,
+.dropdownBtnOpen {
+  border-color: #3b82f6;
+}
+
+.dropdownValue {
+  color: #f2f2f5;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dropdownPlaceholder {
+  color: #6f6f78;
+}
+
+.arrow {
+  color: #6f6f78;
+  transition: transform 0.15s ease;
+  flex-shrink: 0;
+}
+
+.arrowUp {
+  transform: rotate(180deg);
+}
+
+.dropdownList {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  z-index: 50;
+  background: #26262b;
+  border: 1px solid #33333a;
+  border-radius: 14px;
+  padding: 6px;
+  max-height: 220px;
+  overflow-y: auto;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.55);
+}
+
+.dropdownItem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 12px;
+  border-radius: 10px;
+  font-size: 14px;
+  color: #d8d8de;
+  cursor: pointer;
+  transition: background 0.12s ease;
+}
+
+.dropdownItem:hover {
+  background: #33333a;
+}
+
+.dropdownItem input {
+  accent-color: #3b82f6;
+}
+
+.dropdownEmpty {
+  padding: 12px;
+  text-align: center;
+  color: #6f6f78;
+  font-size: 13px;
+}
+
+/* === Синяя кнопка-таблетка, как «Войти» на скрине === */
+.submitBtn {
+  width: 100%;
+  margin-top: 8px;
+  padding: 13px;
+  background: #3b82f6;
+  border: none;
+  border-radius: 999px;
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.submitBtn:hover:not(:disabled) {
+  background: #2f6fe0;
+}
+
+.submitBtn:disabled {
+  background: #4a5a75;
+  cursor: not-allowed;
 }

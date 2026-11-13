@@ -12,6 +12,10 @@ function NewComics({ onSuccess, onClose }) {
   const [isUploading, setIsUploading] = useState(false);
   const [error, setError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isGenreOpen, setIsGenreOpen] = useState(false);
+  const [isTagOpen, setIsTagOpen] = useState(false);
+
+
 
   useEffect(()=>{
     fetch(`${API_URL}/genre`)
@@ -24,6 +28,32 @@ function NewComics({ onSuccess, onClose }) {
       .then(setTags)
       .catch(()=>{}); 
   },[]);
+
+  useEffect(() => {
+    if (!isGenreOpen) return;
+    const close = (e) => {
+      if (!e.target.closest(`.${styles.dropdown}`)) setIsGenreOpen(false);
+    };
+    document.addEventListener('mousedown', close);
+    return () => document.removeEventListener('mousedown', close);
+  }, [isGenreOpen]);
+
+
+  const getGenreLabel = () => {
+    if (form.genre_ids.length === 0) return 'Выберите жанры';
+    const selected = genres
+      .filter((g) => form.genre_ids.includes(g.id))
+      .map((g) => g.name);
+    return selected.length <= 2 ? selected.join(', ') : `Выбрано: ${selected.length}`;
+  };
+
+    const getTagLabel = () => {
+    if (form.tag_ids.length === 0) return 'Выберите тэги';
+    const selected = tags
+      .filter((g) => form.tag_ids.includes(g.id))
+      .map((g) => g.name);
+    return selected.length <= 2 ? selected.join(', ') : `Выбрано: ${selected.length}`;
+  };
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -171,36 +201,73 @@ function NewComics({ onSuccess, onClose }) {
           />
         )}
       </label>
+      
+      {/* отображение выбора Жанров */}
+      <div className={styles.dropdown}>
+        <button
+          type="button"
+          className={`${styles.dropdownBtn} ${isGenreOpen ? styles.dropdownBtnOpen : ''}`}
+          onClick={() => setIsGenreOpen((v) => !v)}
+        >
+          <span className={form.genre_ids.length ? styles.dropdownValue : styles.dropdownPlaceholder}>
+            {getGenreLabel()}
+          </span>
+          <span className={`${styles.arrow} ${isGenreOpen ? styles.arrowUp : ''}`}>▾</span>
+        </button>
 
-      <fieldset className={styles.group}>
-        <legend>Жанры</legend>
-        {genres.map((genre)=>(
-          <label key={genre.id} className={styles.check}>
-            <input
-              type="checkbox"
-              checked={form.genre_ids.includes(genre.id)}
-              onChange={()=> toggleInList('genre_ids', genre.id)}
-            />
-            {genre.name}
-          </label>
-        ))}
-      </fieldset>
+        {isGenreOpen && (
+          <div className={styles.dropdownList}>
+            {genres.map((genre) => (
+              <label key={genre.id} className={styles.dropdownItem}>
+                <input
+                  type="checkbox"
+                  checked={form.genre_ids.includes(genre.id)}
+                  onChange={() => toggleInList('genre_ids', genre.id)}
+                />
+                {genre.name}
+              </label>
+            ))}
+            {genres.length === 0 && (
+              <div className={styles.dropdownEmpty}>Жанры не загрузились</div>
+            )}
+          </div>
+        )}
+      </div>
 
-      <fieldset className={styles.group}>
-        <legend>Тэги</legend>
-        {tags.map((tag)=>(
-          <label key={tag.id} className={styles.check}>
-            <input
-              type="checkbox"
-              checked={form.tag_ids.includes(tag.id)}
-              onChange={()=> toggleInList('tag_ids', tag.id)}
-            />
-            {tag.name}
-          </label>
-        ))}
-      </fieldset>
+      {/* отображение выбора тэгов */}
+      <div className={styles.dropdown}>
+        <button
+          type="button"
+          className={`${styles.dropdownBtn} ${isTagOpen ? styles.dropdownBtnOpen : ''}`}
+          onClick={() => setIsTagOpen((v) => !v)}
+        >
+          <span className={form.tag_ids.length ? styles.dropdownValue : styles.dropdownPlaceholder}>
+            {getTagLabel()}
+          </span>
+          <span className={`${styles.arrow} ${isTagOpen ? styles.arrowUp : ''}`}>▾</span>
+        </button>
+
+        {isTagOpen && (
+          <div className={styles.dropdownList}>
+            {tags.map((tag) => (
+              <label key={tag.id} className={styles.dropdownItem}>
+                <input
+                  type="checkbox"
+                  checked={form.tag_ids.includes(tag.id)}
+                  onChange={() => toggleInList('tag_ids', tag.id)}
+                />
+                {tag.name}
+              </label>
+            ))}
+            {tags.length === 0 && (
+              <div className={styles.dropdownEmpty}>Жанры не загрузились</div>
+            )}
+          </div>
+        )}
+      </div>
 
       <button
+        className={styles.submitBtn}
         type="submit"
         disabled={isSubmitting || isUploading}
       >
