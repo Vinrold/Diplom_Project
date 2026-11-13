@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Modal from '../../components/Modal/Modal';
-import NewComics from '../Comics';
+import NewComics from '../NewComics';
 import style from './index.module.css'
 
 

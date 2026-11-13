@@ -4,7 +4,7 @@ import HomePage from '../pages/HomePage';
 import LoginPage from '../pages/LoginPage';
 import UserPage from '../pages/UserPage';
 import Profile from '../pages/Profile';
-import NewComics from '../pages/Comics';
+import NewComics from '../pages/NewComics';
 
 function AppRoutes({isLoggedIn, userName, handleLogout}) {
   return (
