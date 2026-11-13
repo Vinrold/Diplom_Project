@@ -4,7 +4,7 @@ import HomePage from '../pages/HomePage';
 import LoginPage from '../pages/LoginPage';
 import UserPage from '../pages/UserPage';
 import Profile from '../pages/Profile';
-import NewComics from '../pages/NewComics';
+import ComicPage from '../pages/Comics';
 
 function AppRoutes({isLoggedIn, userName, handleLogout}) {
   return (
@@ -26,6 +26,7 @@ function AppRoutes({isLoggedIn, userName, handleLogout}) {
         localStorage.getItem('access_token') ? <Profile/> : <Navigate to='/' replace/>
       }
       />
+      <Route path="/comics/:id" element={<ComicPage />} />
     </Routes>
 
   )

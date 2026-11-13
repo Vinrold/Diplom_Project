@@ -213,3 +213,12 @@
 .sectionHeader .addBtn {
   margin: 0;
 }
+
+.link {
+  text-decoration: none;
+  color: inherit; /* или свой цвет, например #6ea8ff */
+}
+
+.link:hover {
+  text-decoration: underline; /* опционально: подсветка при наведении */
+}

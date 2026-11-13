@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import Modal from '../../components/Modal/Modal';
 import NewComics from '../NewComics';
 import style from './index.module.css'
@@ -97,17 +97,19 @@ function Profile() {
           <div className={style.gridView}>
             {myComics.map((comic) => (
               <article key={comic.id} className={style.card}>
-                <img
-                  src={getImageUrl(comic.image_url)}
-                  alt={comic.name}
-                  className={style.cardImage}
-                />
-                <div className={style.cardInfo}>
-                  <h3 className={style.cardTitle}>{comic.name}</h3>
-                  <div className={style.cardMeta}>
-                    <span>{comic.is_published ? 'Опубликован' : 'Черновик'}</span>
+                <Link to={`/comics/${comic.id}`} className={style.link}>
+                  <img
+                    src={getImageUrl(comic.image_url)}
+                    alt={comic.name}
+                    className={style.cardImage}
+                  />
+                  <div className={style.cardInfo}>
+                    <h3 className={style.cardTitle}>{comic.name}</h3>
+                    <div className={style.cardMeta}>
+                      <span>{comic.is_published ? 'Опубликован' : 'Черновик'}</span>
+                    </div>
                   </div>
-                </div>
+                </Link>
               </article>
             ))}
           </div>
@@ -139,14 +141,16 @@ function Profile() {
           <div className={style.gridView}>
             {favorites.map((comic) => (
               <article key={comic.id} className={style.card}>
-                <img
-                  src={getImageUrl(comic.image_url)}
-                  alt={comic.name}
-                  className={style.cardImage}
-                />
-                <div className={style.cardInfo}>
-                  <h3 className={style.cardTitle}>{comic.name}</h3>
-                </div>
+                <Link to={`/comics/${comic.id}`} className={style.link}>
+                  <img
+                    src={getImageUrl(comic.image_url)}
+                    alt={comic.name}
+                    className={style.cardImage}
+                  />
+                  <div className={style.cardInfo}>
+                    <h3 className={style.cardTitle}>{comic.name}</h3>
+                  </div>
+                </Link>
               </article>
             ))}
           </div>

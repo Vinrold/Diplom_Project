@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import style from './index.module.css'
 
 
@@ -89,21 +89,23 @@ function HomePage({ isLoggedIn, userName, handleLogout }) {
         <div className={style.comicsGrid}>
           {comics.map((comic) => (
             <article key={comic.id} className={style.comicCard}>
-              <img
-                src={getImageUrl(comic.image_url)}
-                alt={comic.name}
-                className={style.comicImage}
-              />
-              <div className={style.comicInfo}>
-                <h3 className={style.comicTitle}>{comic.name}</h3>
-                <p className={style.comicSubtitle}>
-                  {comic.owner_id || 'Автор неизвестен'}
-                </p>
-                <div className={style.comicMeta}>
-                  <span>ID: {comic.id}</span>
-                  <span>{comic.is_published ? 'Опубликован' : 'Черновик'}</span>
+              <Link to={`/comics/${comic.id}`} className={style.link}>
+                <img
+                  src={getImageUrl(comic.image_url)}
+                  alt={comic.name}
+                  className={style.comicImage}
+                />
+                <div className={style.comicInfo}>
+                  <h3 className={style.comicTitle}>{comic.name}</h3>
+                  <p className={style.comicSubtitle}>
+                    {comic.owner_id || 'Автор неизвестен'}
+                  </p>
+                  <div className={style.comicMeta}>
+                    <span>ID: {comic.id}</span>
+                    <span>{comic.is_published ? 'Опубликован' : 'Черновик'}</span>
+                  </div>
                 </div>
-              </div>
+              </Link>
             </article>
           ))}
         </div>

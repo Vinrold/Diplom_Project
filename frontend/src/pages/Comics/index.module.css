@@ -1,0 +1,217 @@
+.page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px 16px;
+  color: #f2f2f5;
+}
+
+.status {
+  padding: 60px 20px;
+  text-align: center;
+  color: #8a8a93;
+}
+
+.backBtn {
+  margin-top: 12px;
+  padding: 10px 24px;
+  background: #3b82f6;
+  border: none;
+  border-radius: 999px;
+  color: #fff;
+  cursor: pointer;
+}
+
+/* === Шапка комикса === */
+.header {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 32px;
+  margin-bottom: 40px;
+}
+
+.coverSide {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.cover {
+  width: 100%;
+  aspect-ratio: 2 / 3;
+  object-fit: cover;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+}
+
+.readBtn {
+  padding: 13px;
+  background: #3b82f6;
+  border: none;
+  border-radius: 999px;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.readBtn:hover {
+  background: #2f6fe0;
+}
+
+.bookmarkBtn {
+  padding: 12px;
+  background: #26262b;
+  border: 1px solid #33333a;
+  border-radius: 999px;
+  color: #d8d8de;
+  cursor: pointer;
+  transition: border-color 0.15s ease;
+}
+
+.bookmarkBtn:hover {
+  border-color: #3b82f6;
+}
+
+.infoSide {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.meta {
+  font-size: 13px;
+  color: #8a8a93;
+}
+
+.title {
+  margin: 0;
+  font-size: 32px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.stats {
+  display: flex;
+  gap: 24px;
+  font-size: 14px;
+  color: #c5c5cd;
+}
+
+/* === Описание сразу после названия === */
+.description {
+  margin-top: 4px;
+  padding: 16px 20px;
+  background: #1c1c20;
+  border: 1px solid #26262b;
+  border-radius: 14px;
+}
+
+.descriptionTitle {
+  margin: 0 0 8px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.descriptionText {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #c5c5cd;
+  white-space: pre-line; /* переносы из текстаре сохраняются */
+}
+
+/* === Тэги === */
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.tag {
+  padding: 6px 14px;
+  background: #26262b;
+  border-radius: 999px;
+  font-size: 13px;
+  color: #d8d8de;
+}
+
+/* === Главы === */
+.chaptersSection {
+  border-top: 1px solid #26262b;
+  padding-top: 24px;
+}
+
+.chaptersTitle {
+  margin: 0 0 16px;
+  font-size: 20px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.chaptersList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.chapterItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 20px;
+  background: #1c1c20;
+  border: 1px solid #26262b;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background 0.12s ease, border-color 0.12s ease;
+}
+
+.chapterItem:hover {
+  background: #26262b;
+  border-color: #33333a;
+}
+
+.chapterName {
+  font-size: 14px;
+  color: #f2f2f5;
+}
+
+.chapterDate {
+  font-size: 13px;
+  color: #6f6f78;
+}
+
+.noChapters {
+  color: #6f6f78;
+  font-size: 14px;
+}
+
+/* Адаптив: на узких экранах обложка сверху */
+@media (max-width: 768px) {
+  .header {
+    grid-template-columns: 1fr;
+  }
+  .coverSide {
+    max-width: 280px;
+  }
+  .title {
+    font-size: 24px;
+  }
+}
+
+.addChapterBtn {
+  padding: 10px 20px;
+  background: #26262b;
+  border: 1px dashed #33333a;
+  border-radius: 999px;
+  color: #6ea8ff;
+  font-size: 13px;
+  cursor: pointer;
+  transition: border-color 0.15s ease;
+}
+
+.addChapterBtn:hover {
+  border-color: #3b82f6;
+}

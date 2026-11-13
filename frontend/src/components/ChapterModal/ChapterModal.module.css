@@ -1,0 +1,87 @@
+/* === Форма в модалке === */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* === Поля === */
+.field label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 13px;
+  color: #8a8a93;
+}
+
+.input {
+  width: 100%;
+  padding: 13px 16px;
+  background: #26262b;
+  border: 1px solid #33333a;
+  border-radius: 999px;
+  color: #f2f2f5;
+  font-size: 14px;
+  outline: none;
+  box-sizing: border-box;
+  transition: border-color 0.15s ease;
+}
+
+.input:focus {
+  border-color: #3b82f6;
+}
+
+/* Файловый инпут: сама строка выбора файлов */
+.fileInput {
+  width: 100%;
+  color: #c5c5cd;
+  font-size: 13px;
+}
+
+/* Кнопка «Выбрать файлы» внутри file input */
+.fileInput::file-selector-button {
+  padding: 8px 16px;
+  background: #26262b;
+  border: 1px solid #33333a;
+  border-radius: 999px;
+  color: #d8d8de;
+  cursor: pointer;
+  margin-right: 12px;
+  transition: border-color 0.15s ease;
+}
+
+.fileInput::file-selector-button:hover {
+  border-color: #3b82f6;
+}
+
+/* === Ошибка === */
+.error {
+  color: #ef4444;
+  background: #2a1416;
+  border: 1px solid #4a1f23;
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-size: 13px;
+  margin: 0;
+}
+
+/* === Кнопка отправки === */
+.submitBtn {
+  margin-top: 8px;
+  padding: 13px;
+  background: #3b82f6;
+  border: none;
+  border-radius: 999px;
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.submitBtn:hover:not(:disabled) {
+  background: #2f6fe0;
+}
+
+.submitBtn:disabled {
+  background: #4a5a75;
+  cursor: not-allowed;
+}

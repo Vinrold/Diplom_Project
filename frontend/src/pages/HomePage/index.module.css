@@ -121,3 +121,12 @@
   color: #666;
   grid-column: 1 / -1;
 }
+
+.link {
+  text-decoration: none;
+  color: inherit; /* или свой цвет, например #6ea8ff */
+}
+
+.link:hover {
+  text-decoration: underline; /* опционально: подсветка при наведении */
+}
