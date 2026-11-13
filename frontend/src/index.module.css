@@ -1,9 +1,3 @@
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
   background-color: #000;
@@ -11,38 +5,195 @@ body {
   line-height: 1.5;
 }
 
-input {
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  font-size: 14px;
-}
-
-input:focus {
-  outline: none;
-  border-color: #007bff;
-}
-
-.container {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-  background-color: #000000;
-}
-
+/* ===== Шапка ===== */
 .header {
-  padding: 1rem;
-  border-bottom: 2px solid #9c9c9c;
-  background: #000000;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: #141417;
+  border-bottom: 1px solid #232328;
+}
+
+.headerInner {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 24px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
 }
 
 .logo {
-  height: 100px;
-  width: auto;
-  display: block;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  object-fit: cover;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: transform 0.15s ease;
 }
 
-.main {
-  flex: 1;
-  padding: 2rem;
+.logo:hover {
+  transform: scale(1.05);
+}
+
+/* Навигация-таблетки */
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.navLink {
+  padding: 9px 18px;
+  border-radius: 999px;
+  background: #1f1f24;
+  border: none;
+  color: #d8d8de;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.navLink:hover {
+  background: #2a2a30;
+  color: #ffffff;
+}
+
+.navMore {
+  padding: 9px 14px;
+  border-radius: 999px;
+  background: #1f1f24;
+  color: #d8d8de;
+  cursor: pointer;
+  letter-spacing: 2px;
+  font-size: 14px;
+}
+
+/* Правая зона */
+.rightZone {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.search {
+  position: relative;
+  width: 260px;
+}
+
+.searchIcon {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 18px;
+  height: 18px;
+  color: #6f6f78;
+  pointer-events: none;
+}
+
+.searchInput {
+  width: 77%;
+  padding: 10px 16px 10px 40px;
+  background: #1f1f24;
+  border: 1px solid #2a2a30;
+  border-radius: 999px;
+  color: #f2f2f5;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.15s ease;
+}
+
+.searchInput::placeholder {
+  color: #6f6f78;
+}
+
+.searchInput:focus {
+  border-color: #3b82f6;
+}
+
+/* Кнопка Вход/Регистрация */
+.authBtn {
+  padding: 10px 20px;
+  border-radius: 10px;
+  background: #3b82f6;
+  border: none;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s ease;
+}
+
+.authBtn:hover {
+  background: #2f6fe0;
+}
+
+/* Меню залогиненного */
+.userMenu {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.username {
+  color: #f2f2f5;
+  font-size: 14px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.accountBtn {
+  padding: 10px 18px;
+  border-radius: 10px;
+  background: #3b82f6;
+  border: none;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s ease;
+}
+
+.accountBtn:hover {
+  background: #2f6fe0;
+}
+
+.logoutBtn {
+  padding: 10px 16px;
+  border-radius: 10px;
+  background: transparent;
+  border: 1px solid #2a2a30;
+  color: #d8d8de;
+  font-size: 14px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.logoutBtn:hover {
+  background: #1f1f24;
+  color: #ffffff;
+}
+
+/* Адаптив */
+@media (max-width: 960px) {
+  .search {
+    width: 180px;
+  }
+}
+
+@media (max-width: 760px) {
+  .nav,
+  .search {
+    display: none;
+  }
 }

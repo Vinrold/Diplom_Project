@@ -7,12 +7,16 @@ class ComicsCreate(BaseModel):
     name: str
     description: Optional[str] = None
     image_url: Optional[str] = None
+    genre_ids: List[int] = []
+    tag_ids: List[int] = []
 
 # Обновление комикса
 class ComicsUpdate(BaseModel):
     name: Optional[str] = None
     description: Optional[str] = None
     image_url: Optional[str] = None
+    genre_ids: List[int] = []
+    tag_ids: List[int] = []
 
 
 

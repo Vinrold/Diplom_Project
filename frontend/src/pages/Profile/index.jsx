@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import Modal from '../../components/Modal/Modal';
+import NewComics from '../Comics';
 import style from './index.module.css'
 
 
@@ -7,6 +9,7 @@ function Profile() {
   const [profile, setProfile] = useState(null);
   const [myComics, setMyComics] = useState([]);
   const [favorites, setFavorites] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false)
   const [error, setError] = useState('')
 
   const fetchWithAuth = async (url) => {
@@ -20,21 +23,22 @@ function Profile() {
     return res.json();
   };
 
+  const load = async () => {
+    try {
+      setProfile(await fetchWithAuth('http://127.0.0.1:8000/users/me'));
+    } catch {setError('Не удалось загрузить профиль');}
+
+    try {
+      setMyComics(await fetchWithAuth('http://127.0.0.1:8000/users/me/comics'));
+    } catch {setError('Не удалось загрузить комиксы');}
+
+    try {
+      setFavorites(await fetchWithAuth('http://127.0.0.1:8000/users/me/favorites'));
+    } catch {setError('Не удалось загрузить избранное');}
+
+  };
+
   useEffect(() => {
-    const load = async () => {
-      try {
-        const [user, comics, favs] = await Promise.all([
-          fetchWithAuth('http://127.0.0.1:8000/users/me'),
-          fetchWithAuth('http://127.0.0.1:8000/users/me/comics'),
-          fetchWithAuth('http://127.0.0.1:8000/users/me/favorites')
-        ]);
-        setProfile(user);
-        setMyComics(comics);
-        setFavorites(favs);
-      } catch (err) {
-        setError(err.message);
-      }
-    };
     load();
   }, []);
 
@@ -73,17 +77,17 @@ function Profile() {
         </div>
       </section>
       <section className={style.sectionBlock}>
-        <h2 className={style.sectionTitle}>
-          Мои комиксы <span className={style.countBadge}>({myComics.length})</span>
-        </h2>
-        <button
-          className={style.addBtn}
-          onClick={() => {
-          }}
-        >
-        + Добавить комикс
-        </button>
-
+        <div className={style.sectionHeader}>
+          <h2 className={style.sectionTitle}>
+            Мои комиксы <span className={style.countBadge}>({myComics.length})</span>
+          </h2>
+          <button
+            className={style.addBtn}
+            onClick={() => setIsModalOpen(true)}
+          >
+          + Добавить комикс
+          </button>
+        </div>
         {myComics.length === 0 ? (
           <div className={style.emptyState}>
             <h3>Пока нет комиксов</h3>
@@ -107,6 +111,18 @@ function Profile() {
               </article>
             ))}
           </div>
+        )}
+
+        {isModalOpen && (
+          <Modal isOpen={isModalOpen} onClose={()=>setIsModalOpen(false)} title='Новый комикс'>
+            <NewComics 
+              onSuccess={()=>{
+                load();
+                setIsModalOpen(false)
+              }}
+              onClose={()=> setIsModalOpen(false)}
+            />
+          </Modal>
         )}
       </section>     
       <section className={style.sectionBlock}>

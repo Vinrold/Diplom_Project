@@ -7,6 +7,7 @@ from pathlib import Path
 import app.models
 from app.database import engine, Base
 from app.routers import users, auth, chapters, comics, comments, genre, tags, pages
+from app.routers.uploads import router as uploads_router, UPLOAD_DIR
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -20,6 +21,7 @@ app = FastAPI(
     description="FastAPI+React+PostgreSQL",
     version="1.0.0",
 )
+
 
 # 2. Рассчитываем BASE_DIR относительно main.py (папка backend)
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -48,6 +50,9 @@ app.include_router(chapters.router)
 app.include_router(pages.router)
 app.include_router(genre.router)
 app.include_router(tags.router)
+app.include_router(uploads_router)
+
+app.mount("/uploads", StaticFiles(directory=UPLOAD_DIR), name="uploads")
 
 @app.get("/")
 def root():

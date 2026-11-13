@@ -14,7 +14,7 @@ class Comics(Base):
     # описание комикса
     description: Mapped[str | None] = mapped_column(Text, nullable=True)
     # Владелец
-    owner_id: Mapped[int | None] = mapped_column(ForeignKey("users.id"), nullable=False, index=True)
+    owner_id: Mapped[int | None] = mapped_column(ForeignKey("users.id"), nullable=True, index=True)
     # сылка на картинку
     image_url: Mapped[str | None] = mapped_column(String(512), nullable=True)
     # флаг публикации
